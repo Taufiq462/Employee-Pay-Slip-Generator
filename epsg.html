@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Pay Slip Generator</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="https://i.ibb.co/v4xtVXK9/Screenshot-2025-02-17-155458.png" type="image/x-icon">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .payslip {
+      width: 100%;
+      max-width: 800px;
+      background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+      border-radius: 15px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #000000 0%, #330000 50%, #660000 100%);
+      color: white;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::after {
+      content: "";
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      top: -100px;
+      right: -50px;
+    }
+    
+    .company-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background-color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      overflow: hidden;
+    }
+    
+    .logo img {
+      width: 82px;
+      height: 82px;
+    }
+    
+    .company-name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    
+    .document-title {
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    
+    .pay-period {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+    
+    .employee-section {
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .employee-details {
+      flex: 1;
+    }
+    
+    .section-title {
+      font-size: 18px;
+      color: #800000;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    
+    .detail-row {
+      display: flex;
+      margin-bottom: 10px;
+    }
+    
+    .detail-label {
+      width: 140px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .detail-value {
+      flex: 1;
+      font-weight: 400;
+    }
+    
+    .earnings-deductions {
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .earnings, .deductions {
+      flex: 1;
+      padding-right: 20px;
+    }
+    
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+    
+    .item-label {
+      color: #444;
+    }
+    
+    .item-value {
+      font-weight: 500;
+    }
+    
+    .separator {
+      width: 1px;
+      background-color: #ddd;
+      margin: 0 20px;
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 16px;
+      color: #800000;
+      margin-top: 5px;
+    }
+    
+    .net-pay-section {
+      background-color: #f8f8f8;
+      padding: 30px;
+      border-top: 1px solid #eee;
+      text-align: right;
+    }
+    
+    .net-pay-label {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 5px;
+    }
+    
+    .net-pay-amount {
+      font-size: 28px;
+      font-weight: 700;
+      color: #800000;
+    }
+    
+    .footer {
+      padding: 20px 30px;
+      background-color: #f0f0f0;
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+    }
+    
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      font-size: 100px;
+      color: rgba(0, 0, 0, 0.03);
+      font-weight: bold;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    
+    /* Control Panel Styles */
+    .control-panel {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    .control-group {
+      margin-bottom: 15px;
+    }
+    
+    .control-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #555;
+    }
+    
+    .control-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .btn {
+      background-color: #800000;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #600000;
+    }
+    
+    .btn-secondary {
+      background-color: #555;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #333;
+    }
+    
+    .btn-group {
+      margin-top: 20px;
+    }
+    
+    /* Editable field styles */
+    input[type="text"], input[type="number"] {
+      border: 1px solid #ddd;
+      padding: 3px 5px;
+      border-radius: 3px;
+      width: 100%;
+      max-width: 150px;
+    }
+    
+    .add-item-btn {
+      background: none;
+      border: none;
+      color: #800000;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 5px;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .add-item-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .remove-item-btn {
+      background: none;
+      border: none;
+      color: #ff0000;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    
+    /* Filename input modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    
+    .modal-title {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .modal-input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .modal-btn {
+      padding: 8px 15px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .modal-btn-primary {
+      background-color: #800000;
+      color: white;
+    }
+    
+    .modal-btn-secondary {
+      background-color: #ddd;
+      color: #333;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="control-panel">
+    <h2>Salary Slip Generator</h2>
+    
+    <div class="control-group">
+      <label class="control-label">Employee Name:</label>
+      <input type="text" id="employeeName" class="control-input" value="Muhammad Ahmed Khan">
+    </div>
+    
+    <div class="control-group">
+      <label class="control-label">Pay Period:</label>
+      <input type="text" id="payPeriod" class="control-input" value="March 2025">
+    </div>
+    
+    <div class="btn-group">
+      <button id="generatePdf" class="btn">Generate PDF</button>
+      <button id="addEarning" class="btn btn-secondary">Add Earning Item</button>
+      <button id="addDeduction" class="btn btn-secondary">Add Deduction Item</button>
+    </div>
+  </div>
+  
+  <div class="payslip" id="payslip">
+    <div class="header">
+      <div class="company-info">
+        <div class="logo">
+          <img src="https://i.ibb.co/v4xtVXK9/Screenshot-2025-02-17-155458.png" alt="Publishershub Logo" />
+        </div>
+        <div>
+          <div class="company-name">Publishershub</div>
+        </div>
+      </div>
+      <h1 class="document-title">Salary Slip</h1>
+      <div class="pay-period" id="displayPayPeriod">Pay Period: March 2025</div>
+    </div>
+    
+    <div class="employee-section">
+      <div class="employee-details">
+        <h2 class="section-title">Employee Information</h2>
+        <div class="detail-row">
+          <div class="detail-label">Name:</div>
+          <div class="detail-value" id="displayEmployeeName">Muhammad Ahmed Khan</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Month/Year:</div>
+          <div class="detail-value" id="displayMonthYear">March 2025</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="earnings-deductions">
+      <div class="earnings" id="earningsSection">
+        <h2 class="section-title">Earnings</h2>
+        <div class="item-row earning-item">
+          <div class="item-label">
+            <input type="text" class="earning-label" value="Salary" placeholder="Earning item">
+          </div>
+          <div class="item-value">
+            PKR <input type="number" class="earning-amount" value="150000" min="0" step="100">
+            <button class="remove-item-btn" onclick="removeItem(this, 'earning')">×</button>
+          </div>
+        </div>
+        <button class="add-item-btn" onclick="addEarningItem()">+ Add Earning</button>
+        <div class="total-row">
+          <div>Total Earnings</div>
+          <div id="totalEarnings">PKR 150,000.00</div>
+        </div>
+      </div>
+      
+      <div class="separator"></div>
+
+      <div class="deductions" id="deductionsSection">
+        <h2 class="section-title">Deductions</h2>
+        <div class="item-row deduction-item">
+          <div class="item-label">
+            <input type="text" class="deduction-label" value="Absents (2 days)" placeholder="Deduction item">
+          </div>
+          <div class="item-value">
+            PKR <input type="number" class="deduction-amount" value="10000" min="0" step="100">
+            <button class="remove-item-btn" onclick="removeItem(this, 'deduction')">×</button>
+          </div>
+        </div>
+        <button class="add-item-btn" onclick="addDeductionItem()">+ Add Deduction</button>
+        <div class="total-row">
+          <div>Total Deductions</div>
+          <div id="totalDeductions">PKR 10,000.00</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="net-pay-section">
+      <div class="net-pay-label">Net Salary</div>
+      <div class="net-pay-amount" id="netPay">PKR 140,000.00</div>
+    </div>
+    
+    <div class="footer">
+      This is a computer-generated document. No signature required.
+    </div>
+  </div>
+
+  <!-- Filename input modal -->
+  <div class="modal" id="filenameModal">
+    <div class="modal-content">
+      <h3 class="modal-title">Enter filename for PDF</h3>
+      <input type="text" id="pdfFilename" class="modal-input" placeholder="e.g., Salary_Slip_March_2025" value="Salary_Slip">
+      <div class="modal-buttons">
+        <button class="modal-btn modal-btn-secondary" id="cancelPdf">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="confirmPdf">Download PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize jsPDF
+    const { jsPDF } = window.jspdf;
+    
+    // Update displayed values when inputs change
+    document.getElementById('employeeName').addEventListener('input', function() {
+      document.getElementById('displayEmployeeName').textContent = this.value;
+    });
+    
+    document.getElementById('payPeriod').addEventListener('input', function() {
+      const period = this.value;
+      document.getElementById('displayPayPeriod').textContent = `Pay Period: ${period}`;
+      document.getElementById('displayMonthYear').textContent = period;
+    });
+    
+    // Add event listeners to all calculation inputs
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('earning-amount') || e.target.classList.contains('deduction-amount')) {
+        calculateTotals();
+      }
+    });
+    
+    // Calculate totals
+    function calculateTotals() {
+      // Calculate earnings total
+      let earningsTotal = 0;
+      document.querySelectorAll('.earning-amount').forEach(input => {
+        earningsTotal += parseFloat(input.value) || 0;
+      });
+      document.getElementById('totalEarnings').textContent = `PKR ${formatCurrency(earningsTotal)}`;
+      
+      // Calculate deductions total
+      let deductionsTotal = 0;
+      document.querySelectorAll('.deduction-amount').forEach(input => {
+        deductionsTotal += parseFloat(input.value) || 0;
+      });
+      document.getElementById('totalDeductions').textContent = `PKR ${formatCurrency(deductionsTotal)}`;
+      
+      // Calculate net pay
+      const netPay = earningsTotal - deductionsTotal;
+      document.getElementById('netPay').textContent = `PKR ${formatCurrency(netPay)}`;
+    }
+    
+    // Format currency with commas
+    function formatCurrency(amount) {
+      return amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+    
+    // Add new earning item
+    function addEarningItem(label = '', amount = 0) {
+      const earningsSection = document.getElementById('earningsSection');
+      const addButton = earningsSection.querySelector('.add-item-btn');
+      
+      const newItem = document.createElement('div');
+      newItem.className = 'item-row earning-item';
+      newItem.innerHTML = `
+        <div class="item-label">
+          <input type="text" class="earning-label" value="${label}" placeholder="Earning item">
+        </div>
+        <div class="item-value">
+          PKR <input type="number" class="earning-amount" value="${amount}" min="0" step="100">
+          <button class="remove-item-btn" onclick="removeItem(this, 'earning')">×</button>
+        </div>
+      `;
+      
+      earningsSection.insertBefore(newItem, addButton);
+      
+      // Add event listener to the new input
+      newItem.querySelector('.earning-amount').addEventListener('input', calculateTotals);
+    }
+    
+    // Add new deduction item
+    function addDeductionItem(label = '', amount = 0) {
+      const deductionsSection = document.getElementById('deductionsSection');
+      const addButton = deductionsSection.querySelector('.add-item-btn');
+      
+      const newItem = document.createElement('div');
+      newItem.className = 'item-row deduction-item';
+      newItem.innerHTML = `
+        <div class="item-label">
+          <input type="text" class="deduction-label" value="${label}" placeholder="Deduction item">
+        </div>
+        <div class="item-value">
+          PKR <input type="number" class="deduction-amount" value="${amount}" min="0" step="100">
+          <button class="remove-item-btn" onclick="removeItem(this, 'deduction')">×</button>
+        </div>
+      `;
+      
+      deductionsSection.insertBefore(newItem, addButton);
+      
+      // Add event listener to the new input
+      newItem.querySelector('.deduction-amount').addEventListener('input', calculateTotals);
+    }
+    
+    // Remove item
+    function removeItem(button, type) {
+      const item = button.closest('.item-row');
+      item.remove();
+      calculateTotals();
+    }
+    
+    // Show filename input modal
+    document.getElementById('generatePdf').addEventListener('click', function() {
+      // Set default filename based on employee name and period
+      const employeeName = document.getElementById('employeeName').value.replace(/\s+/g, '_');
+      const payPeriod = document.getElementById('payPeriod').value.replace(/\s+/g, '_');
+      document.getElementById('pdfFilename').value = `Salary_Slip_${employeeName}_${payPeriod}`;
+      
+      // Show the modal
+      document.getElementById('filenameModal').style.display = 'flex';
+    });
+    
+    // Cancel PDF generation
+    document.getElementById('cancelPdf').addEventListener('click', function() {
+      document.getElementById('filenameModal').style.display = 'none';
+    });
+    
+    // Confirm PDF generation
+    document.getElementById('confirmPdf').addEventListener('click', function() {
+      const filename = document.getElementById('pdfFilename').value.trim() || 'Salary_Slip';
+      generatePdf(filename);
+      document.getElementById('filenameModal').style.display = 'none';
+    });
+    
+    // Generate PDF with specified filename
+    function generatePdf(filename) {
+      const payslip = document.getElementById('payslip');
+      
+      // Hide buttons before generating PDF
+      const addButtons = payslip.querySelectorAll('.add-item-btn');
+      addButtons.forEach(btn => btn.style.display = 'none');
+      
+      // Hide remove buttons
+      const removeButtons = payslip.querySelectorAll('.remove-item-btn');
+      removeButtons.forEach(btn => btn.style.display = 'none');
+      
+      // Convert inputs to text for PDF
+      convertInputsToText();
+      
+      html2canvas(payslip).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210; // A4 width in mm
+        const pageHeight = 295; // A4 height in mm
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+        
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        
+        // Add new page if content is too long
+        while (heightLeft >= 0) {
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+        
+        // Save with the specified filename
+        pdf.save(`${filename}.pdf`);
+        
+        // Restore buttons after PDF generation
+        addButtons.forEach(btn => btn.style.display = '');
+        removeButtons.forEach(btn => btn.style.display = '');
+        
+        // Restore inputs
+        restoreInputs();
+      });
+    }
+    
+    // Convert inputs to text for PDF generation
+    function convertInputsToText() {
+      // Employee name and period
+      const employeeNameInput = document.getElementById('employeeName');
+      const payPeriodInput = document.getElementById('payPeriod');
+      
+      // Convert earning inputs
+      document.querySelectorAll('.earning-item').forEach(item => {
+        const labelInput = item.querySelector('.earning-label');
+        const amountInput = item.querySelector('.earning-amount');
+        
+        if (labelInput && amountInput) {
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = labelInput.value;
+          labelInput.replaceWith(labelSpan);
+          
+          const amountSpan = document.createElement('span');
+          amountSpan.textContent = `PKR ${formatCurrency(parseFloat(amountInput.value) || 0)}`;
+          amountInput.replaceWith(amountSpan);
+        }
+      });
+      
+      // Convert deduction inputs
+      document.querySelectorAll('.deduction-item').forEach(item => {
+        const labelInput = item.querySelector('.deduction-label');
+        const amountInput = item.querySelector('.deduction-amount');
+        
+        if (labelInput && amountInput) {
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = labelInput.value;
+          labelInput.replaceWith(labelSpan);
+          
+          const amountSpan = document.createElement('span');
+          amountSpan.textContent = `PKR ${formatCurrency(parseFloat(amountInput.value) || 0)}`;
+          amountInput.replaceWith(amountSpan);
+        }
+      });
+    }
+    
+    // Restore inputs after PDF generation
+    function restoreInputs() {
+      // Employee name and period are already handled by their event listeners
+      
+      // Restore earning inputs
+      document.querySelectorAll('.earning-item').forEach(item => {
+        const labelSpan = item.querySelector('.item-label span');
+        const amountSpan = item.querySelector('.item-value span');
+        
+        if (labelSpan && amountSpan) {
+          const labelInput = document.createElement('input');
+          labelInput.type = 'text';
+          labelInput.className = 'earning-label';
+          labelInput.value = labelSpan.textContent;
+          labelInput.placeholder = 'Earning item';
+          labelSpan.replaceWith(labelInput);
+          
+          const amountValue = amountSpan.textContent.replace('PKR ', '').replace(/,/g, '');
+          const amountInput = document.createElement('input');
+          amountInput.type = 'number';
+          amountInput.className = 'earning-amount';
+          amountInput.value = parseFloat(amountValue).toFixed(0);
+          amountInput.min = '0';
+          amountInput.step = '100';
+          amountSpan.replaceWith('PKR ');
+          amountSpan.parentNode.insertBefore(amountInput, amountSpan.nextSibling);
+          
+          // Add remove button back if it's missing
+          if (!item.querySelector('.remove-item-btn')) {
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-item-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = function() { removeItem(this, 'earning'); };
+            amountInput.parentNode.appendChild(removeBtn);
+          }
+        }
+      });
+      
+      // Restore deduction inputs
+      document.querySelectorAll('.deduction-item').forEach(item => {
+        const labelSpan = item.querySelector('.item-label span');
+        const amountSpan = item.querySelector('.item-value span');
+        
+        if (labelSpan && amountSpan) {
+          const labelInput = document.createElement('input');
+          labelInput.type = 'text';
+          labelInput.className = 'deduction-label';
+          labelInput.value = labelSpan.textContent;
+          labelInput.placeholder = 'Deduction item';
+          labelSpan.replaceWith(labelInput);
+          
+          const amountValue = amountSpan.textContent.replace('PKR ', '').replace(/,/g, '');
+          const amountInput = document.createElement('input');
+          amountInput.type = 'number';
+          amountInput.className = 'deduction-amount';
+          amountInput.value = parseFloat(amountValue).toFixed(0);
+          amountInput.min = '0';
+          amountInput.step = '100';
+          amountSpan.replaceWith('PKR ');
+          amountSpan.parentNode.insertBefore(amountInput, amountSpan.nextSibling);
+          
+          // Add remove button back if it's missing
+          if (!item.querySelector('.remove-item-btn')) {
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-item-btn';
+            removeBtn.innerHTML = '×';
+            removeBtn.onclick = function() { removeItem(this, 'deduction'); };
+            amountInput.parentNode.appendChild(removeBtn);
+          }
+        }
+      });
+      
+      // Reattach event listeners
+      document.querySelectorAll('.earning-amount, .deduction-amount').forEach(input => {
+        input.addEventListener('input', calculateTotals);
+      });
+    }
+    
+    // Initialize buttons
+    document.getElementById('addEarning').addEventListener('click', function() {
+      addEarningItem();
+    });
+    
+    document.getElementById('addDeduction').addEventListener('click', function() {
+      addDeductionItem();
+    });
+    
+    // Initial calculation
+    calculateTotals();
+  </script>
+</body>
+</html>
